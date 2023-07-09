@@ -1,0 +1,128 @@
+package assignment.java;
+import java.util.Scanner;
+
+public class CarBillingAutomation {
+    public static void main(String[] args) {
+        // Car prices
+        double poloTrendlinePrice = 870000;
+        double poloHighlinePrice = 1009000;
+        double virtusTrendlinePrice = 1105000;
+        double virtusHighlinePrice = 1308000;
+        double taigunTrendlinePrice = 1489000;
+        double taigunHighlinePrice = 1542000;
+        double taigunToplinePrice = 1771000;
+
+        // Additional fees
+        double rtoFee = 113990;
+        double insuranceFee = 47300;
+        double tcsCharges = 11000;
+        double additionalAccessories = 15000;
+
+        Scanner scanner = new Scanner(System.in);
+
+        // Car model selection
+        System.out.println("Available car models:");
+        System.out.println("1. Polo Trendline");
+        System.out.println("2. Polo Highline");
+        System.out.println("3. Virtus Trendline");
+        System.out.println("4. Virtus Highline");
+        System.out.println("5. Taigun Trendline");
+        System.out.println("6. Taigun Highline");
+        System.out.println("7. Taigun Topline");
+
+        System.out.print("Select car model: ");
+        int carModel = scanner.nextInt();
+
+        double showroomPrice = 0.0;
+
+        switch (carModel) {
+            case 1:
+                showroomPrice = poloTrendlinePrice;
+                break;
+            case 2:
+                showroomPrice = poloHighlinePrice;
+                break;
+            case 3:
+                showroomPrice = virtusTrendlinePrice;
+                break;
+            case 4:
+                showroomPrice = virtusHighlinePrice;
+                break;
+            case 5:
+                showroomPrice = taigunTrendlinePrice;
+                break;
+            case 6:
+                showroomPrice = taigunHighlinePrice;
+                break;
+            case 7:
+                showroomPrice = taigunToplinePrice;
+                break;
+            default:
+                System.out.println("Invalid car model selection.");
+                System.exit(0);
+        }
+
+        // Additional options
+        System.out.print("Do you need Insurance? (yes/no): ");
+        String needInsurance = scanner.next();
+
+        System.out.print("Do you need Additional Accessories? (yes/no): ");
+        String needAccessories = scanner.next();
+
+        // Dealer discount
+        System.out.print("Dealer discount (% or rupees): ");
+        String discountInput = scanner.next();
+
+        double discount = 0.0;
+        boolean applyDiscount = false;
+
+        if (needInsurance.equalsIgnoreCase("no") && needAccessories.equalsIgnoreCase("no")) {
+        	if(discountInput!=null) {
+        		System.out.println("Any one of the additional features has to be added, otherwise 0 discount should be applied.");
+                System.exit(0);}
+        	
+
+        	else {
+        		discount=0;
+        	
+        	
+        		applyDiscount=true;}
+        	
+        }
+        
+
+        if (!discountInput.isEmpty()) {
+            if (discountInput.endsWith("%")) {
+                discount = Double.parseDouble(discountInput.substring(0, discountInput.length() - 1));
+                discount = (discount / 100) * showroomPrice;
+                applyDiscount = true;
+            } else {
+                discount = Double.parseDouble(discountInput);
+                if (discount > 30000) {
+                    System.out.println("Maximum discount should not exceed 30,000.");
+                    System.exit(0);
+                }
+                applyDiscount = true;
+            }
+        }
+
+        // Calculate total cost
+        double totalCost = showroomPrice + rtoFee + tcsCharges;
+
+        if (needInsurance.equalsIgnoreCase("yes")) {
+            totalCost += insuranceFee;
+            if (applyDiscount) {
+                totalCost -= Math.min(discount, 30000);
+            }
+        }
+
+        if (needAccessories.equalsIgnoreCase("yes")) {
+            totalCost += additionalAccessories;
+            if (applyDiscount && !needInsurance.equalsIgnoreCase("yes")) {
+                totalCost -= Math.min(discount, 30000);
+            }
+        }
+
+        // Display output
+        System.out.println("Total cost: " + totalCost);}
+}
